@@ -4,6 +4,7 @@
 @using Warehouse.Models
 <link rel="stylesheet" type="text/css" href="~/Content/Index.css">
 @Scripts.Render("~/Scripts/MyScripts/InfoWindow.js")
+@Scripts.Render("~/Scripts/MyScripts/Filters.js")
 
 <h2>Products Table</h2>
 <br />
@@ -12,8 +13,8 @@
     <div class="bluebutton" onclick="ShowAddWindow()"><span class="glyphicon glyphicon-plus"></span></div>
     <div class="bluebutton" onclick="Del()"><span class="glyphicon glyphicon-minus"></span></div>
     <div class="bluebutton" onclick="Edit()"><span class="glyphicon glyphicon-edit"></span></div>
-    <div class="bluebutton" onclick="Filter()"><span class="glyphicon glyphicon-filter"></span></div>
-
+    <div class="bluebutton" id="blockfilter" onclick="Filter()"><span class="glyphicon glyphicon-filter"></span></div>
+    <div class="bluebutton" onclick="Settings()"><span class="glyphicon glyphicon-cog"></span></div>
 
 </div>
 
@@ -67,17 +68,116 @@
     </form>
 </div>
 
+<div id="settingsWindow" class="modal">
 
+
+   
+    <form class="modal-content animate" method="post" >
+
+        <div class="container">
+
+            <br />
+            <br />
+            <label>
+                <b>Available:</b> <input type="checkbox" id="tableavail">
+            </label>
+            <br />
+            <label>
+                <b>Description:</b> <input type="checkbox" id="tabledesc">
+            </label>
+            <br />
+            <br />
+            <br />
+            <button type="button" class="bluebuttonform" onclick="Cancel()">Cancel</button>
+            <button type="button" class="bluebuttonform" onclick="SetTable()">Add</button>
+        </div>
+        </form>
+</div>
 
 <script>
-
+    var desc = true;
+    var avail = true;
     var modal = document.getElementById('addWindow');
-
+    var modalsettings = document.getElementById('settingsWindow');
         var selected;
         var id;
+        function Settings()
+        {
 
+            if (avail == true) {
+                $("#tableavail").prop("checked", true);
+            }
+            else {
+                $("#tableavail").prop("checked", false);
+            }
+            if (desc == true) {
+                $("#tabledesc").prop("checked", true);
+            }
+            else {
+                $("#tabledesc").prop("checked", false);
+            }
+            modalsettings.style.display = "block";
+           
+            
+        }
+        function SetTable()
+        {
+            if ($("#tableavail").prop("checked") == true)
+            {
+               
+                avail = true;
+                var column = $(".tableavailtd");
+                var i;
+                for (i = 0; i < column.length; i++)
+                {
+                    column[i].style.display = "";
+                }
+                modalsettings.style.display = "none";
+                
+              
+            }
+            if ($("#tableavail").prop("checked") == false)
+            {
+                
+                avail = false;
+                var column = $(".tableavailtd");
+                var i;
+                for (i = 0; i < column.length; i++) {
+                    column[i].style.display = "none";
+                }
+                modalsettings.style.display = "none";
+            }
+            if ($("#tabledesc").prop("checked") == true) {
+                desc = true;
+                
+                var column = $(".tabledesctd");
+                var i;
+                for (i = 0; i < column.length; i++) {
+                    column[i].style.display = "";
+                }
+                modalsettings.style.display = "none";
+
+            }
+            if ($("#tabledesc").prop("checked") == false)
+            {
+                
+                desc = false;
+                var column = $(".tabledesctd");
+                var i;
+                for (i = 0; i < column.length; i++) {
+                    column[i].style.display = "none";
+                }
+                modalsettings.style.display = "none";
+            }
+            Loader();
+        }
         window.onclick = function (event) {
             if (event.target == modal) {
+                Cancel();
+            }
+        }
+        window.onclick = function (event) {
+            if (event.target == modalsettings) {
                 Cancel();
             }
         }
@@ -86,6 +186,7 @@
             if (confirm("All data you entered would be lost, continue?") == true)
             {
                 document.getElementById('addWindow').style.display = 'none';
+                modalsettings.style.display = "none";
                 clearForm();
 
             }
@@ -123,6 +224,10 @@
                                     ShowAddWindow(selected.getAttribute("Id"));
 
                             }
+
+                        }
+                        if (xmlfind.readyState = 1) {
+                            Loader();
 
                         }
                     }
@@ -180,6 +285,10 @@
                             messBad("You need to select product")
                         }
                     }
+                    if (xml.responseText = 1)
+                    {
+                        Loader();
+                    }
                 }
                 xml.open("POST", "@Url.Action("DelElement")");
         xml.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -219,15 +328,17 @@
                         cell.setAttribute("onclick", func);
                         var name = document.createElement("td");
                         name.innerHTML = $("#name").val();
-
+                        name.classList.add("tablelist");
                         var price = document.createElement("td");
+                        
+                        price.classList.add("tableprice");
                         price.innerHTML = $("#price").val();
                         var dateEdited = $("#date").val().split("-")[2] + "." + $("#date").val().split("-")[1] + "." + $("#date").val().split("-")[0];
 
 
                         var date = document.createElement("td");
                         date.innerHTML = dateEdited;
-
+                        date.classList.add("tabledate");
 
 
                         cell.appendChild(name);
@@ -250,13 +361,14 @@
                         cell.setAttribute("onclick", func);
                         var name = document.createElement("td");
                         name.innerHTML = $("#name").val();
-
+                        name.classList.add("tablelist");
                         var price = document.createElement("td");
                         price.innerHTML = $("#price").val();
+                        price.classList.add("tableprice");
                         var dateEdited = $("#date").val().split("-")[2] + "." + $("#date").val().split("-")[1] + "." + $("#date").val().split("-")[0];
                         var date = document.createElement("td");
                         date.innerHTML = dateEdited;
-
+                        date.classList.add("tabledate");
 
                         cell.appendChild(name);
                         cell.appendChild(price);
@@ -276,6 +388,10 @@
 
                     }
 
+                }
+                if (xmladd.readyState = 1)
+                {
+                    Loader();
                 }
             }
             xmladd.open("POST", "@Url.Action("AddElement")");
@@ -327,191 +443,28 @@
     }
     function Filter()
     {
+
+        $("#blockfilter").attr("onclick", "");
         $(".filterpage").slideToggle(1000);
-    }
-    function InitializeSearch() {
-        Refresh();
-
-        var rows;
-        var prices;
-        var dates;
-        var editeddate;
-          rows = $(".tablelist");
-
-        if ($("#searchprice").val() != undefined) {
-            prices = $(".tableprice");
-        }
-        if ($("#searchdate").val() != undefined) {
-            editeddate = $("#searchdate").val().split("-")[2] + "." + $("#searchdate").val().split("-")[1] + "." + $("#searchdate").val().split("-")[0];
-            dates = $(".tabledate");
-        }
-
-        var i;
-     
-
-        for (i = 0; i < rows.length; i++)
-        {
-
-            if (rows[i].innerText != $("#searchname").val() && $("#searchname").val() != "")
-            {
-                rows[i].parentElement.style.display = "none";
-              
-
-            }
-            if (prices[i].innerText != $("#searchprice").val() && $("#searchprice").val() != "") {
-
-                prices[i].parentElement.style.display = "none";
-               
-            }
-            if (dates[i].innerText != editeddate && $("#searchdate").val() != "") {
-                dates[i].parentElement.style.display = "none";
-               
-
-            }
+        setTimeout(function () {
+            $("#blockfilter").attr("onclick", "Filter()");
            
-
-
-
         }
-
-
-
-
-    }
-    function Refresh()
-    {
-        Loader();
-        var rows = $(".tablelist");
-        for (i = 0; i < rows.length; i++) {
-
-            rows[i].parentElement.style.display = "table-row";
-            rows[i].parentElement.classList.remove("hidden");
-
-        }
+            , 1000);
+        
     }
     function Loader()
     {
-        $(".loaderwindow").fadeToggle(500);
+        $(".loaderwindow").fadeIn(500);
         
         setTimeout(function()
-            {
-            $(".loaderwindow").fadeToggle(500);
+        {
+            $(".loaderwindow").fadeOut(500);
         }
             , 500);
-    }
-    function SortByName()
-    {
-
-        var rowsname = $(".tablelist");
-        var o;
-        var filtered = false;
-        for (o = 0; o < rowsname.length; o++) {
-            if (getComputedStyle(rowsname[o].parentElement).getPropertyValue("display") != "none") {
-                filtered = true;
-                rowsname[o].classList.add("filtered");
-
-            }
-        }
-        if (filtered == true) {
-            var rowsname = $(".tablelist");
-            var i, j;
-            Loader();
-
-            for (j = 0; j < rowsname.length; j++) {
-
-                for (i = 0; i < rowsname.length - 1; i++) {
-                    rowsname = $(".filtered");
-
-                    if (rowsname[i].innerText[0] > rowsname[i + 1].innerText[0]) {
-
-                        var temp = rowsname[i].parentElement.outerHTML;
-                        rowsname[i].parentElement.outerHTML = rowsname[i + 1].parentElement.outerHTML;
-                        rowsname[i + 1].parentElement.outerHTML = temp;
-                    }
-                }
-            }
-            RemoveFiltered();
-        }
-        else {
-            var i, j;
-            Loader();
-            for (j = 0; j < rowsname.length; j++) {
-
-                for (i = 0; i < rowsname.length - 1; i++) {
-                    rowsname = $(".tablelist");
-
-                    if (rowsname[i].innerText[0] > rowsname[i + 1].innerText[0] && getComputedStyle(rowsname[i].parentElement).getPropertyValue("display") == "table-row" && getComputedStyle(rowsname[i + 1].parentElement).getPropertyValue("display") == "table-row") {
-
-                        var temp = rowsname[i].parentElement.innerHTML;
-                        rowsname[i].parentElement.innerHTML = rowsname[i + 1].parentElement.innerHTML;
-                        rowsname[i + 1].parentElement.innerHTML = temp;
-                    }
-                }
-            }
-        }
-    }
-    function SortByPrice() {
-
-        var rowsname = $(".tableprice");
-        var o;
-        var filtered = false;
-        for (o = 0; o < rowsname.length; o++)
-        {
-            if (getComputedStyle(rowsname[o].parentElement).getPropertyValue("display") != "none")
-            {
-                filtered = true;
-                rowsname[o].classList.add("filtered");
-                
-            }
-        }
-        if (filtered == true)
-        {
-            var rowsname = $(".filtered");
-            var i, j;
-            Loader();
-           
-            for (j = 0; j < rowsname.length; j++) {
-
-                for (i = 0; i < rowsname.length - 1; i++) {
-                    rowsname = $(".filtered");
-
-                    if (rowsname[i].innerText > rowsname[i + 1].innerText) {
-
-                        var temp = rowsname[i].parentElement.outerHTML;
-                        rowsname[i].parentElement.outerHTML = rowsname[i + 1].parentElement.outerHTML;
-                        rowsname[i + 1].parentElement.outerHTML = temp;
-                    }
-                }
-            }
-            RemoveFiltered();
-        }
-        else
-        {
-            var i, j;
-            Loader();
-            for (j = 0; j < rowsname.length; j++) {
-
-                for (i = 0; i < rowsname.length - 1; i++) {
-                    rowsname = $(".tableprice");
-
-                    if (rowsname[i].innerText > rowsname[i + 1].innerText && getComputedStyle(rowsname[i].parentElement).getPropertyValue("display") == "table-row" && getComputedStyle(rowsname[i + 1].parentElement).getPropertyValue("display") == "table-row") {
-
-                        var temp = rowsname[i].parentElement.innerHTML;
-                        rowsname[i].parentElement.innerHTML = rowsname[i + 1].parentElement.innerHTML;
-                        rowsname[i + 1].parentElement.innerHTML = temp;
-                    }
-                }
-            }
-        }
        
     }
-    function RemoveFiltered()
-    {
-        var rowsname = $(".tableprice");
-        var i;
-        for (i = 0; i < rowsname.length; i++)
-        {
-            rowsname[i].classList.remove("filtered");
-        }
-    }
+    
+    
+    
 </script>

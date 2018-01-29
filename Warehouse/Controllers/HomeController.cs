@@ -11,13 +11,16 @@ namespace Warehouse.Controllers
     public class HomeController : Controller
     {
         ProductModel db = new ProductModel();
-        public ActionResult Index()
+        
+
+            public ActionResult Index()
         {
            
             ViewBag.Products = db.Products;
             return View();
         }
-        
+       
+
         [HttpPost]
         public string AddElement(string id, string name, int price, bool available, DateTime date, string description)
         {
