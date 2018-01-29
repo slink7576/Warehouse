@@ -341,9 +341,27 @@
                         date.classList.add("tabledate");
 
 
+                        var available = document.createElement("td");
+                        if ($("#available").prop("checked") == true) {
+                            var temp = "Available";
+                        }
+                        if ($("#available").prop("checked") == false) {
+                            var temp = "Absent";
+                        }
+                        available.innerHTML = temp;
+                        available.classList.add("tableavailtd");
+                        var desc = document.createElement("td");
+                        desc.innerHTML = $("#description").val();
+                        desc.classList.add("tabledesctd");
+
+
+
+
                         cell.appendChild(name);
                         cell.appendChild(price);
                         cell.appendChild(date);
+                        cell.appendChild(available);
+                        cell.appendChild(desc);
                         cell.setAttribute("class", "tabledefault");
                         $(cell).fadeIn();
                         $("#table tr:last").after(cell);
@@ -369,10 +387,25 @@
                         var date = document.createElement("td");
                         date.innerHTML = dateEdited;
                         date.classList.add("tabledate");
+                        var available = document.createElement("td");
+                        if ($("#available").prop("checked") == true)
+                        {
+                            var temp = "Available";
+                        }
+                        if ($("#available").prop("checked") == false) {
+                            var temp = "Absent";
+                        }
+                        available.innerHTML = temp;
+                        available.classList.add("tableavailtd");
+                        var desc = document.createElement("td");
+                        desc.innerHTML = $("#description").val();
+                        desc.classList.add("tabledesctd");
 
                         cell.appendChild(name);
                         cell.appendChild(price);
                         cell.appendChild(date);
+                        cell.appendChild(available);
+                        cell.appendChild(desc);
                         cell.setAttribute("class", "tabledefault");
                         $(cell).fadeIn();
                         $("#table tr:last").after(cell);
