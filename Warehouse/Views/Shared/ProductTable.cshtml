@@ -1,0 +1,20 @@
+﻿@using Warehouse.Models
+
+<table id="table">
+    <tr>
+        <th onclick="SortByName()" class="mouser"><a><ins>Name</ins></a></th>
+        <th onclick="SortByPrice()" class="mouser"><a><ins>Price</ins></a></th>
+        <th >Date</th>
+    </tr>
+
+    @foreach (Product c in ViewBag.Products)
+    {
+
+        <tr id="@c.Id" onclick="Select(@c.Id)">
+            <td class="tablelist" id="itemname">@c.Name</td>
+            <td class ="tableprice">@c.Price</td>
+            <td class ="tabledate">@c.Date.ToShortDateString()</td>
+        </tr>
+    }
+</table>
+
