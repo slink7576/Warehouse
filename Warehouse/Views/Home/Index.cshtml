@@ -89,18 +89,21 @@
             <br />
             <br />
             <button type="button" class="bluebuttonform" onclick="Cancel()">Cancel</button>
-            <button type="button" class="bluebuttonform" onclick="SetTable()">Add</button>
+            <button type="button" class="bluebuttonform" onclick="SetTable()">Apply</button>
         </div>
         </form>
 </div>
 
 <script>
-    var desc = true;
-    var avail = true;
+    var desc = false;
+    var avail = false;
     var modal = document.getElementById('addWindow');
     var modalsettings = document.getElementById('settingsWindow');
         var selected;
         var id;
+        document.onload(SetTable());
+        
+        
         function Settings()
         {
 
@@ -374,6 +377,7 @@
                     else {
                         messSucc("Succesfully added");
                         var cell = document.createElement("tr");
+                        alert(xmladd.responseText);
                         cell.setAttribute("id", xmladd.responseText);
                         var func = "Select(" + xmladd.responseText + ")";
                         cell.setAttribute("onclick", func);

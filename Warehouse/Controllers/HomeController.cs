@@ -33,7 +33,7 @@ namespace Warehouse.Controllers
                     db.SaveChanges();
 
 
-                    return db.Products.FirstOrDefault(c => c.Name == name).Id.ToString();
+                    return db.Products.FirstOrDefault(c => c.Name == name && c.Price == price && c.Available == available && c.Date == date && c.Description == description).Id.ToString();
                 }
                 catch (Exception)
                 {
