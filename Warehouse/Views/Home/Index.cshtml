@@ -377,7 +377,7 @@
                     else {
                         messSucc("Succesfully added");
                         var cell = document.createElement("tr");
-                        alert(xmladd.responseText);
+                       
                         cell.setAttribute("id", xmladd.responseText);
                         var func = "Select(" + xmladd.responseText + ")";
                         cell.setAttribute("onclick", func);
@@ -403,7 +403,13 @@
                         available.classList.add("tableavailtd");
                         var desc = document.createElement("td");
                         desc.innerHTML = $("#description").val();
+                        if ($("#description").val() == "")
+                        {
+                            desc.innerHTML = "No description";
+                        }
                         desc.classList.add("tabledesctd");
+
+                       
 
                         cell.appendChild(name);
                         cell.appendChild(price);
